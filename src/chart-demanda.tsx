@@ -26,22 +26,6 @@ ChartJS.register(
 // FechaModificacion: "2025-05-26T01:55:00.627000"
 // FechaOperacion: "2025-05-26"
 // Generacion: 1823
-type SistemaType = 'BCA' | 'SIN' | 'BCS'
-
-type DemandaData = {
-    id: number;
-    Demanda: number;
-    Generacion: number;
-    Pronostico: number;
-    Gerencia: string;
-    HoraOperacion: number;
-    FechaCreacion: string;
-    FechaModificacion: string;
-    FechaOperacion: string;
-    Enlace: number | null;
-    Sistema: SistemaType
-
-};
 
 // export const options = {
 //     responsive: true,

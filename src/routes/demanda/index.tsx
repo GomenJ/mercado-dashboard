@@ -1,11 +1,10 @@
+import { demandaQueryOptions } from '@/feautures/demanda/api/demanda-query-options'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/demanda/')({
-  // loader: ({ context: { queryClient } }) => {
-  // },
-  component: RouteComponent,
+  loader: ({ context: { queryClient } }) => {
+    return queryClient.ensureQueryData(demandaQueryOptions)
+  },
+  pendingComponent: () => <div>Loading...</div>,
 })
 
-function RouteComponent() {
-  return <div>Hello "/demanda/demanda"!</div>
-}
