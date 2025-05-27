@@ -1,7 +1,9 @@
-import { queryOptions } from '@tanstack/react-query'
-import { obtenerDiaActualDemanda } from './obtener-dia-actual-demanda'
+import { queryOptions } from "@tanstack/react-query";
+import { obtenerDiaActualDemanda } from "./obtener-dia-actual-demanda";
 
 export const demandaQueryOptions = queryOptions({
-    queryKey: ['demanda'],
-    queryFn: () => obtenerDiaActualDemanda()
-})
+	queryKey: ["demanda"],
+	queryFn: () => obtenerDiaActualDemanda(),
+	// 15 minutes in milliseconds
+	staleTime: 15 * 60 * 1000,
+});

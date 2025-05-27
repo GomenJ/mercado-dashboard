@@ -13,7 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as PmlMdaIndexImport } from './routes/pml-mda/index'
 import { Route as DemandaIndexImport } from './routes/demanda/index'
+import { Route as DemandaBalanceIndexImport } from './routes/demanda-balance/index'
+import { Route as CapacidadTransferenciaIndexImport } from './routes/capacidad-transferencia/index'
 
 // Create/Update Routes
 
@@ -29,11 +32,30 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PmlMdaIndexRoute = PmlMdaIndexImport.update({
+  id: '/pml-mda/',
+  path: '/pml-mda/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const DemandaIndexRoute = DemandaIndexImport.update({
   id: '/demanda/',
   path: '/demanda/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/demanda/index.lazy').then((d) => d.Route))
+
+const DemandaBalanceIndexRoute = DemandaBalanceIndexImport.update({
+  id: '/demanda-balance/',
+  path: '/demanda-balance/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CapacidadTransferenciaIndexRoute =
+  CapacidadTransferenciaIndexImport.update({
+    id: '/capacidad-transferencia/',
+    path: '/capacidad-transferencia/',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -53,11 +75,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/capacidad-transferencia/': {
+      id: '/capacidad-transferencia/'
+      path: '/capacidad-transferencia'
+      fullPath: '/capacidad-transferencia'
+      preLoaderRoute: typeof CapacidadTransferenciaIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/demanda-balance/': {
+      id: '/demanda-balance/'
+      path: '/demanda-balance'
+      fullPath: '/demanda-balance'
+      preLoaderRoute: typeof DemandaBalanceIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/demanda/': {
       id: '/demanda/'
       path: '/demanda'
       fullPath: '/demanda'
       preLoaderRoute: typeof DemandaIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pml-mda/': {
+      id: '/pml-mda/'
+      path: '/pml-mda'
+      fullPath: '/pml-mda'
+      preLoaderRoute: typeof PmlMdaIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +111,75 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/capacidad-transferencia': typeof CapacidadTransferenciaIndexRoute
+  '/demanda-balance': typeof DemandaBalanceIndexRoute
   '/demanda': typeof DemandaIndexRoute
+  '/pml-mda': typeof PmlMdaIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/capacidad-transferencia': typeof CapacidadTransferenciaIndexRoute
+  '/demanda-balance': typeof DemandaBalanceIndexRoute
   '/demanda': typeof DemandaIndexRoute
+  '/pml-mda': typeof PmlMdaIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/capacidad-transferencia/': typeof CapacidadTransferenciaIndexRoute
+  '/demanda-balance/': typeof DemandaBalanceIndexRoute
   '/demanda/': typeof DemandaIndexRoute
+  '/pml-mda/': typeof PmlMdaIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/demanda'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/capacidad-transferencia'
+    | '/demanda-balance'
+    | '/demanda'
+    | '/pml-mda'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/demanda'
-  id: '__root__' | '/' | '/about' | '/demanda/'
+  to:
+    | '/'
+    | '/about'
+    | '/capacidad-transferencia'
+    | '/demanda-balance'
+    | '/demanda'
+    | '/pml-mda'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/capacidad-transferencia/'
+    | '/demanda-balance/'
+    | '/demanda/'
+    | '/pml-mda/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CapacidadTransferenciaIndexRoute: typeof CapacidadTransferenciaIndexRoute
+  DemandaBalanceIndexRoute: typeof DemandaBalanceIndexRoute
   DemandaIndexRoute: typeof DemandaIndexRoute
+  PmlMdaIndexRoute: typeof PmlMdaIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CapacidadTransferenciaIndexRoute: CapacidadTransferenciaIndexRoute,
+  DemandaBalanceIndexRoute: DemandaBalanceIndexRoute,
   DemandaIndexRoute: DemandaIndexRoute,
+  PmlMdaIndexRoute: PmlMdaIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +194,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/demanda/"
+        "/capacidad-transferencia/",
+        "/demanda-balance/",
+        "/demanda/",
+        "/pml-mda/"
       ]
     },
     "/": {
@@ -126,8 +206,17 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.tsx"
     },
+    "/capacidad-transferencia/": {
+      "filePath": "capacidad-transferencia/index.tsx"
+    },
+    "/demanda-balance/": {
+      "filePath": "demanda-balance/index.tsx"
+    },
     "/demanda/": {
       "filePath": "demanda/index.tsx"
+    },
+    "/pml-mda/": {
+      "filePath": "pml-mda/index.tsx"
     }
   }
 }
