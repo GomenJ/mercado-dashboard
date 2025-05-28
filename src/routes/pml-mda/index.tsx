@@ -1,9 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { MexicoGerenciaSVGMap } from "@/components/mexico-gerencia-svg-map";
+import { createFileRoute } from "@tanstack/react-router";
+// import { useEffect } from "react";
 
-export const Route = createFileRoute('/pml-mda/')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/pml-mda/")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <div>Hello "/pml-mda/"!</div>
+	console.log("PML-MDA route loaded");
+	return (
+		<>
+			<div>Hello "/pml-mda/"!</div>
+			<div id="svgFile" className="w-72 h-80"></div>
+			<MexicoGerenciaSVGMap />
+		</>
+	);
 }
