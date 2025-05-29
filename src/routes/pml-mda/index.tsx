@@ -1,18 +1,10 @@
-import { MexicoGerenciaSVGMap } from "@/components/mexico-gerencia-svg-map";
+import { pndQueryOptions } from "@/feautures/pml/api/pnd-query-options";
 import { createFileRoute } from "@tanstack/react-router";
 // import { useEffect } from "react";
 
 export const Route = createFileRoute("/pml-mda/")({
-	component: RouteComponent,
+	loader: ({ context: { queryClient } }) => {
+		return queryClient.ensureQueryData(pndQueryOptions)
+	},
 });
 
-function RouteComponent() {
-	console.log("PML-MDA route loaded");
-	return (
-		<>
-			<div>Hello "/pml-mda/"!</div>
-			<div id="svgFile" className="w-72 h-80"></div>
-			<MexicoGerenciaSVGMap />
-		</>
-	);
-}

@@ -36,7 +36,7 @@ const PmlMdaIndexRoute = PmlMdaIndexImport.update({
   id: '/pml-mda/',
   path: '/pml-mda/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/pml-mda/index.lazy').then((d) => d.Route))
 
 const DemandaIndexRoute = DemandaIndexImport.update({
   id: '/demanda/',
