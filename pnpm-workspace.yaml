@@ -1,5 +1,0 @@
-ignoredBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-onlyBuiltDependencies:
-  - '@swc/core'
