@@ -1,8 +1,7 @@
-import type { PNDData } from "../types/pnd-types";
+import type { PMLDailyData } from "../types/pml-diario-types";
 
-
-export const obtenerPNDCargasAnuales = async (): Promise<PNDData> => {
-    const url = `${import.meta.env.VITE_API_URL}/api/v1/mda_mtr/daily_average_pnd`;
+export const obtenerPMLDiario = async (): Promise<PMLDailyData> => {
+    const url = `${import.meta.env.VITE_API_URL}/api/v1/mda_mtr/pml_comparison_data`;
     try {
         const response = await fetch(url);
 
@@ -10,19 +9,20 @@ export const obtenerPNDCargasAnuales = async (): Promise<PNDData> => {
             throw new Error(`Response status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = await response.json() as PMLDailyData;
+
         if (!data || typeof data !== 'object') {
             throw new Error('Invalid data format received');
         }
 
-        if (!data.currentYear || !data.currentYearData || !data.previousYear || !data.previousYearData) {
+        if (!data.latestDate || !data.latestDayData || !data.previousWeekDate || !data.previousWeekDayData) {
             throw new Error('Missing required fields in the data');
         }
 
         return data;
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        console.error(`Error fetching current day: ${errorMessage}`);
+        console.error(`Error fetching PML daily data: ${errorMessage}`);
         throw error; // Re-throw the error to be handled by the caller
     }
 }

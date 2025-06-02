@@ -1,6 +1,6 @@
 // Parent component (e.g., PNDChartContainer.tsx or PNDPage.tsx)
 import { PNDChart } from './pnd-chart.tsx'; // Your main chart
-import { BrushChart } from './brush-chart.tsx';       // The new brush chart
+import { BrushChart } from './pnd-brush-chart.tsx';       // The new brush chart
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import type { PNDData } from '../types/pnd-types.ts';
 

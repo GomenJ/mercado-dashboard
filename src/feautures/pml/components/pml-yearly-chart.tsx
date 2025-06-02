@@ -12,7 +12,8 @@ import {
     type ChartOptions,
     type ChartData,
 } from 'chart.js';
-import type { PNDData, YearData } from '../types/pnd-types';
+import type { PMLCurrentYearRange, PMLPreviousYearRange, PMLYearData } from '../types/pml-anual-types';
+import type { PMLDailyAverage } from '../utils/filter-data-by-gerencia';
 
 ChartJS.register(
     CategoryScale,
@@ -24,14 +25,21 @@ ChartJS.register(
     Legend
 );
 
-interface PNDChartProps {
-    pndData: PNDData;
+interface PMLYearlyChartProps {
+    pmlData: {
+        currentYearRange: PMLCurrentYearRange;
+        previousYearRange: PMLPreviousYearRange;
+        currentYearData: PMLYearData[] | PMLDailyAverage[];
+        previousYearData: PMLYearData[] | PMLDailyAverage[];
+    }
     xRange?: { min?: string; max?: string }; // Optional range
 }
 
-export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
+export const PMLYearlyChart = ({ pmlData, xRange }: PMLYearlyChartProps) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
 
+    const currentYear = pmlData.currentYearRange.start.substring(0, 4); // Extract year for label
+    const previousYear = pmlData.previousYearRange.start.substring(0, 4); // Extract year for label
     const options: ChartOptions<'line'> = {
         responsive: true,
         // maintainAspectRatio: false,
@@ -42,7 +50,7 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
             title: {
                 display: true,
                 // Use the years from pndData directly
-                text: `Comparativo PND SIN: Año ${pndData.previousYear} vs ${pndData.currentYear}`,
+                text: `PML promedio SIN: Año ${currentYear} vs ${previousYear}`,
                 font: {
                     size: 18,
                 },
@@ -69,7 +77,7 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
             y: {
                 title: {
                     display: true,
-                    text: 'PND Promedio',
+                    text: 'PML Promedio',
                 },
                 beginAtZero: false,
             },
@@ -77,11 +85,11 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
     };
 
     const processedChartData = useMemo((): ChartData<'line'> => {
-        // Destructure directly from pndData prop
-        const { currentYearData, previousYearData, currentYear, previousYear } = pndData;
+        const { currentYearData, previousYearData } = pmlData;
 
-        const createDataMap = (data: YearData[]): Map<string, number> => {
-            return new Map(data.map(item => [item.Fecha.substring(5), item.average_PML]));
+        const createDataMap = (data: PMLYearData[] | PMLDailyAverage[]): Map<string, number> => {
+            // Using 'number' as per your YearData type for average_PML
+            return new Map(data.map(item => [item.Fecha.substring(5), item.AvgPML]));
         };
 
         const currentYearMap = createDataMap(currentYearData);
@@ -98,15 +106,11 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
             return aDay - bDay;
         });
 
-
         return {
             labels: sortedLabels,
             datasets: [
                 {
-                    label: `PND ${currentYear}`,
-                    // For data points, if a label exists but there's no corresponding entry in the map,
-                    // map.get() will return undefined. Chart.js handles 'undefined' by default as a gap.
-                    // Using '?? null' makes it explicit that it should be treated as missing data.
+                    label: `PML ${currentYear}`,
                     data: sortedLabels.map(label => currentYearMap.get(label) ?? null),
                     borderColor: 'rgb(98, 98, 101)', // Blue
                     backgroundColor: 'rgba(98, 98, 101, 0.5)',
@@ -114,7 +118,7 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
                     spanGaps: true,
                 },
                 {
-                    label: `PND ${previousYear}`,
+                    label: `PML ${previousYear}`,
                     data: sortedLabels.map(label => previousYearMap.get(label) ?? null),
                     borderColor: 'rgb(133, 170, 220)', // Red
                     backgroundColor: 'rgba(133, 170, 220, 0.5)',
@@ -123,9 +127,11 @@ export const PNDChart = ({ pndData, xRange }: PNDChartProps) => {
                 },
             ],
         };
-    }, [pndData]);
+    }, [pmlData]);
 
     return (
-        <Line ref={chartRef} options={options} data={processedChartData} />
+        <div style={{ height: '400px', width: '100%' }}> {/* Adjust size as needed */}
+            <Line ref={chartRef} options={options} data={processedChartData} />
+        </div>
     );
 };

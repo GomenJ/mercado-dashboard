@@ -22,4 +22,5 @@ export const Route = createRootRouteWithContext<{
 			</SidebarProvider>
 		</>
 	),
+	pendingComponent: () => <div>Loading...</div>,
 });
