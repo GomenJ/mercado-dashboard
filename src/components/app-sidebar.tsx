@@ -10,7 +10,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	useSidebar,
+	// useSidebar,
 } from "@/components/ui/sidebar";
 import { Link, type LinkProps } from "@tanstack/react-router";
 
@@ -47,8 +47,6 @@ const links: extendedLinkProps[] = [
 ];
 
 export function AppSidebar() {
-	const { state } = useSidebar();
-	console.log("AppSidebar state", state);
 	return (
 		<Sidebar collapsible="icon">
 			<SidebarHeader>{/* <p>Content</p> */}</SidebarHeader>
