@@ -12,5 +12,4 @@ export type DemandaData = {
     FechaOperacion: string;
     Enlace: number | null;
     Sistema: SistemaType
-
 };

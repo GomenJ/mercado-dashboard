@@ -12,6 +12,7 @@ import {
 
 import { Line } from 'react-chartjs-2';
 import type { DemandaData } from '../types/demanda-type';
+import { useRef } from 'react';
 
 ChartJS.register(
     CategoryScale,
@@ -28,7 +29,7 @@ interface DemandaDataProps {
 }
 
 export const DemandaChart = ({ demandaData }: DemandaDataProps) => {
-    console.log('DemandaChart demandaData:', demandaData);
+    const chartRef = useRef<any>(null);
     const options = {
         responsive: true,
         plugins: {
@@ -48,6 +49,20 @@ export const DemandaChart = ({ demandaData }: DemandaDataProps) => {
 
             },
         },
+        interaction: {
+            mode: 'index' as const,
+            intersect: false,
+        },
+        // onClick: (event: MouseEvent) => {
+        //     const chart = chartRef.current;
+        //     if (!chart) return;
+        //     const points = chart.getElementsAtEventForMode(event, 'index', { intersect: false }, true);
+        //     if (points.length) {
+        //         chart.setActiveElements(points);
+        //         chart.tooltip.setActiveElements(points, { x: event.offsetX, y: event.offsetY });
+        //         chart.update();
+        //     }
+        // },
     }
 
     const labels = Array.from(new Set<number>(demandaData.map((data) => data.HoraOperacion)));
@@ -84,17 +99,10 @@ export const DemandaChart = ({ demandaData }: DemandaDataProps) => {
         ]
     }
 
-    console.log(labels.map((label) => {
-        const foundData = demandaData.find((data) => data.HoraOperacion === label);
-        return foundData ? foundData.Pronostico : 0; // Default to 0 if not found
-    }));
-
-
-    console.log('DemandaChart labels:', labels);
     return (
         <>
             <div>
-                <Line options={options} data={data} />
+                <Line ref={chartRef} options={options} data={data} />
             </div>
         </>
     )

@@ -2,6 +2,7 @@ import type { DemandaData } from "../types/demanda-type";
 
 export const obtenerDiaActualDemanda = async (): Promise<DemandaData[]> => {
     const url = `${import.meta.env.VITE_API_URL}/api/v1/demanda/current_day`;
+    console.log(`Fetching current day data from: ${url}`);
     try {
         const response = await fetch(url);
 
